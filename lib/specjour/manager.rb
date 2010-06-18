@@ -21,8 +21,9 @@ module Specjour
     def bundle_install
       Dir.chdir(project_path) do
         unless system('bundle check > /dev/null')
-          system("bundle install --relock > /dev/null")
+          system("bundle install > /dev/null")
         end
+        system("bundle lock")
       end
     end
 
