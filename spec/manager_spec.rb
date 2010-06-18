@@ -56,13 +56,10 @@ describe Specjour::Manager do
         before :each do
           config_file = ".specjour/bundler.yml"
           
-          command_obj = Object.new
-          mock(command_obj).value { "do it" }
-          
           mock(File).exists?(config_file) { true }
           mock(File).read(config_file) { "" }
-          mock(YAML)::load(anything) {
-            { 'command' => command_obj }
+          mock(YAML).load(anything) {
+            { 'command' => "do it" }
           }
         end
         

@@ -25,16 +25,15 @@ module Specjour
       
       Dir.chdir(project_path) do
         bundle_command = if File.exists?(config_file)
-          bundle_command = YAML::load(File.read(config_file))
-          bundle_command['command'].value
+          bundle_command = YAML.load(File.read(config_file))
+          bundle_command['command']
         else
           "bundle install"
         end
-
+        
+        puts "About to run bundle command : #{bundle_command}"
+        
         unless system('bundle check > /dev/null')
-          
-          puts "About to run bundle command : #{bundle_command}"
-          
           system("#{bundle_command} > /dev/null")
         end
         system("bundle lock")
