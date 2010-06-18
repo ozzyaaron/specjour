@@ -52,9 +52,30 @@ describe Specjour::Manager do
         stub(manager).system('bundle check > /dev/null') { false }
       end
       
-      it "should perform a bundle install" do
-        mock(manager).system('bundle install > /dev/null')
-        manager.bundle_install        
+      context "and there is a bundler YAML file" do
+        before :each do
+          mock(File).exists?(".specjour/bundler") { true }
+          mock(File).read(".specjour/bundler") { "" }
+          mock(YAML)::load(anything) {
+            { 'command' => "do it" }
+          }
+        end
+        
+        it "should get the bundle command from the YAML file" do
+          mock(manager).system('do it > /dev/null')
+          manager.bundle_install        
+        end
+      end
+      
+      context "and there is no bundler YAML file" do
+        before :each do
+          mock(File).exists?(".specjour/bundler") { false }
+        end
+
+        it "should perform a bundle install" do
+          mock(manager).system('bundle install > /dev/null')
+          manager.bundle_install        
+        end        
       end
     end
   end
