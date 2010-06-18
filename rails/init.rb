@@ -1,7 +1,8 @@
 if ENV['PREPARE_DB']
   Rails.configuration.after_initialize do
-    unless ENV['DB_PREPPED'].nil?
-      require 'specjour/db_scrub'
+    puts "ENV : #{ENV['DB_PREPPED']}"      
+    unless ENV['DB_PREPPED'] == "false"
+      require 'specjour/db_scrub' unless DO_NOT_REQUIRE
       Specjour::DbScrub.scrub
     end
   end

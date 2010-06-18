@@ -5,6 +5,8 @@ module Specjour
   end
 end
 
+DO_NOT_REQUIRE = true
+
 describe "Rails Initialiser" do
   before :all do
     ENV['PREPARE_DB'] = "true"
@@ -31,9 +33,9 @@ describe "Rails Initialiser" do
     true.should be_true
   end
   
-  context "when ENV['DB_PREPPED] is not set" do
+  context "when ENV['DB_PREPPED] is false" do
     before :each do
-      ENV['DB_PREPPED'] = nil
+      ENV['DB_PREPPED'] = "false"
     end
     
     it "should not run the DB Scrub task" do
@@ -49,13 +51,7 @@ describe "Rails Initialiser" do
     
     it "should run the DB Scrub task" do
       mock(Specjour::DbScrub).scrub
-      begin
-        Rails.test_block.call
-      rescue LoadError => e
-        # This exception is raised because I can't figure out how to stub Kernel.require
-        # I don't know which object the require is being attached to, so hopefully this test will suffice. 
-        Specjour::DbScrub.scrub
-      end
+      Rails.test_block.call
     end
   end
 end
