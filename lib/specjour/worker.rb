@@ -73,6 +73,7 @@ module Specjour
       ENV['PREPARE_DB'] = 'true'
       ENV['RSPEC_COLOR'] = 'true'
       ENV['TEST_ENV_NUMBER'] = number.to_s
+      ENV['DB_PREPPED'] = 'false'
     end
 
     def set_up_cucumber
