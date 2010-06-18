@@ -42,7 +42,7 @@ describe Specjour::Manager do
     it "should check if there are gems required" do
       mock(manager).system('bundle check > /dev/null') { true }
       
-      manager.bundle_install    
+      manager.bundle_install
     end
 
     context "when gems are required" do
@@ -54,10 +54,15 @@ describe Specjour::Manager do
       
       context "and there is a bundler YAML file" do
         before :each do
-          mock(File).exists?(".specjour/bundler") { true }
-          mock(File).read(".specjour/bundler") { "" }
+          config_file = ".specjour/bundler.yml"
+          
+          command_obj = Object.new
+          mock(command_obj).value { "do it" }
+          
+          mock(File).exists?(config_file) { true }
+          mock(File).read(config_file) { "" }
           mock(YAML)::load(anything) {
-            { 'command' => "do it" }
+            { 'command' => command_obj }
           }
         end
         
@@ -69,7 +74,7 @@ describe Specjour::Manager do
       
       context "and there is no bundler YAML file" do
         before :each do
-          mock(File).exists?(".specjour/bundler") { false }
+          mock(File).exists?(".specjour/bundler.yml") { false }
         end
 
         it "should perform a bundle install" do
