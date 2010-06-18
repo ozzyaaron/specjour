@@ -33,9 +33,9 @@ describe "Rails Initialiser" do
     true.should be_true
   end
   
-  context "when ENV['DB_PREPPED] is false" do
+  context "when ENV['DB_PREPPED] is true" do
     before :each do
-      ENV['DB_PREPPED'] = "false"
+      ENV['DB_PREPPED'] = "true"
     end
     
     it "should not run the DB Scrub task" do
@@ -44,9 +44,9 @@ describe "Rails Initialiser" do
     end
   end
   
-  context "when ENV['DB_PREPPED'] is set" do
+  context "when ENV['DB_PREPPED'] is false" do
     before :each do
-      ENV['DB_PREPPED'] = "true"
+      ENV['DB_PREPPED'] = "false"
     end
     
     it "should run the DB Scrub task" do
