@@ -17,4 +17,45 @@ describe Specjour::Manager do
       manager.available_for?('two').should be_true
     end
   end
+  
+  describe ".bundle_install" do
+    let :manager do
+      stub.instance_of(Specjour::Manager).project_path { "/tmp" }
+      
+      stub(Dir).chdir(anything) { |args|
+        args.last.call # This yields to the block for Dir.chdir()
+      }
+
+      manager = Specjour::Manager.new
+      stub(manager).project_path { "blah" }
+      mock(manager).system('bundle lock')
+      
+      manager
+    end
+    
+    it "should perform a bundle lock" do
+      stub(manager).system('bundle check > /dev/null') { true }
+
+      manager.bundle_install
+    end
+    
+    it "should check if there are gems required" do
+      mock(manager).system('bundle check > /dev/null') { true }
+      
+      manager.bundle_install    
+    end
+
+    context "when gems are required" do
+      before :each do
+        # Not a before :all as it needs to hook into the let hook above
+        
+        stub(manager).system('bundle check > /dev/null') { false }
+      end
+      
+      it "should perform a bundle install" do
+        mock(manager).system('bundle install > /dev/null')
+        manager.bundle_install        
+      end
+    end
+  end
 end
