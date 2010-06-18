@@ -1,6 +1,7 @@
 module Specjour
   class Manager
     require 'dnssd'
+    require 'yaml'
     include DRbUndumped
     include SocketHelpers
 
