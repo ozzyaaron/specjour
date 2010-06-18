@@ -20,16 +20,17 @@ module Specjour
 
     def bundle_install
       config_file = ".specjour/bundler.yml"
-      bundle_command = if File.exists?(config_file)
-        bundle_command = YAML::load(File.read(config_file))
-        bundle_command['command'].value
-      else
-        "bundle install"
-      end
       
       puts "Performing Bundler Operations ... "
       
       Dir.chdir(project_path) do
+        bundle_command = if File.exists?(config_file)
+          bundle_command = YAML::load(File.read(config_file))
+          bundle_command['command'].value
+        else
+          "bundle install"
+        end
+
         unless system('bundle check > /dev/null')
           
           puts "About to run bundle command : #{bundle_command}"
